@@ -30,32 +30,10 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List(items) { item in
-                VStack(alignment: .leading) {
-                    Text(item.name)
-                        .font(.headline)
-                    //The red dot is just a unicode bullet character
-                    //typed in directly.  Nothing fancy :)
-                    Text("\(item.quantity) • \(item.category)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                ShoppingItemRow(item: item)
             }
             .navigationTitle("Shopping List")
-            Image(systemName: "cart.fill")
-                .font(.system(size: 50))
-
-            Text("Shopping List")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-
-            Text("Grocery Time!")
-                .font(.subheadline)
-
-            Button("Add Item") {
-            }
-            .buttonStyle(.borderedProminent)
         }
-        .padding()
     }
 }
 

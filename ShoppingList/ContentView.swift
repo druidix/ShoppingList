@@ -27,12 +27,26 @@ struct ContentView: View {
             )
         ]
 
+    @State private var ShowingAddItem = false
+    
     var body: some View {
         NavigationStack {
             List(items) { item in
                 ShoppingItemRow(item: item)
             }
             .navigationTitle("Shopping List")
+            .toolbar {
+                Button {
+                    ShowingAddItem = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+            .sheet(isPresented: $ShowingAddItem) {
+                AddItemView { newItem in
+                    items.append(newItem)
+                }
+            }
         }
     }
 }

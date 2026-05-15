@@ -32,8 +32,18 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(items) { item in
-                    ShoppingItemRow(item: item)
+                ForEach(items.indices, id: \.self) { index in
+                    NavigationLink{
+                        ItemDetailView(item: items[index])
+                    } label: {
+                        ShoppingItemRow(item: items[index])
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(items[index].isBought ? "UN-buy" : "Bought") {
+                            items[index].isBought.toggle()
+                        }
+                        .tint(items[index].isBought ? .orange : .green)
+                    }
                 }
                 .onDelete { indexSet in
                     items.remove(atOffsets: indexSet)

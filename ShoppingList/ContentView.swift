@@ -27,22 +27,27 @@ struct ContentView: View {
             )
         ]
 
-    @State private var ShowingAddItem = false
+    @State private var showingAddItem = false
     
     var body: some View {
         NavigationStack {
-            List(items) { item in
-                ShoppingItemRow(item: item)
+            List {
+                ForEach(items) { item in
+                    ShoppingItemRow(item: item)
+                }
+                .onDelete { indexSet in
+                    items.remove(atOffsets: indexSet)
+                }
             }
             .navigationTitle("Shopping List")
             .toolbar {
                 Button {
-                    ShowingAddItem = true
+                    showingAddItem = true
                 } label: {
                     Image(systemName: "plus")
                 }
             }
-            .sheet(isPresented: $ShowingAddItem) {
+            .sheet(isPresented: $showingAddItem) {
                 AddItemView { newItem in
                     items.append(newItem)
                 }

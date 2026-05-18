@@ -33,6 +33,19 @@ final class ShoppingListViewModel: ObservableObject {
         saveItems()
     }
     
+    func binding(for item: ShoppingItem) -> Binding<ShoppingItem> {
+        Binding(
+            get: {
+                self.items.first(where: { $0.id == item.id }) ?? item
+            },
+            set: { updatedItem in
+                guard let index = self.items.firstIndex(where: {$0.id == updatedItem.id}) else { return }
+                self.items[index] = updatedItem
+                self.saveItems()
+            }
+        )
+    }
+    
     private func saveItems() {
         do {
             let data = try JSONEncoder().encode(items)

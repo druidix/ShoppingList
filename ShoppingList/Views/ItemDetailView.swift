@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ItemDetailView: View {
-    let item: ShoppingItem
+    @Binding var item: ShoppingItem
     
     var body: some View {
         
         Form {
             Section ("Item") {
-                Text(item.name)
+                TextField("Name", text: $item.name)
             }
             
             Section ("Details") {
-                Text("Quantity: \(item.quantity)")
+                TextField("Quantity", text: $item.quantity)
                 Text("Category: \(item.category)")
-                Text(item.isBought ? "Bought" : "To Buy")
+                Toggle("Bought", isOn: $item.isBought)
             }
         }
         .navigationTitle("Item Details")
@@ -29,10 +29,10 @@ struct ItemDetailView: View {
 
 #Preview {
     NavigationStack {
-        ItemDetailView(item: ShoppingItem(
+        ItemDetailView(item: .constant(ShoppingItem(
             name: "Whole Milk",
             quantity: "0.5 gallon",
             category: "Dairy"
-        ))
+        )))
     }
 }

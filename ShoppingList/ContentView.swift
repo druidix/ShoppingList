@@ -17,7 +17,7 @@ struct ContentView: View {
             List {
                 ForEach(viewModel.items) { item in
                     NavigationLink{
-                        ItemDetailView(item: item)
+                        ItemDetailView(item: viewModel.binding(for: item))
                     } label: {
                         ShoppingItemRow(item: item)
                     }

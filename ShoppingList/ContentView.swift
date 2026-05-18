@@ -9,44 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var items: [ShoppingItem] = [
-            ShoppingItem(
-                name: "Whole Milk",
-                quantity: "0.5 gallon",
-                category: "Dairy"
-            ),
-            ShoppingItem(
-                name: "Bananas",
-                quantity: "4",
-                category: "Produce"
-            ),
-            ShoppingItem(
-                name: "Frosted Mini Wheats",
-                quantity: "1 box",
-                category: "Cereal"
-            )
-        ]
-
+    @StateObject private var viewModel = ShoppingListViewModel()
     @State private var showingAddItem = false
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(items.indices, id: \.self) { index in
+                ForEach(viewModel.items) { item in
                     NavigationLink{
-                        ItemDetailView(item: items[index])
+                        ItemDetailView(item: item)
                     } label: {
-                        ShoppingItemRow(item: items[index])
+                        ShoppingItemRow(item: item)
                     }
                     .swipeActions(edge: .trailing) {
-                        Button(items[index].isBought ? "UN-buy" : "Bought") {
-                            items[index].isBought.toggle()
+                        Button(item.isBought ? "UN-buy" : "Bought") {
+                            viewModel.toggleBought(for: item)
                         }
-                        .tint(items[index].isBought ? .orange : .green)
+                        .tint(item.isBought ? .orange : .green)
                     }
                 }
                 .onDelete { indexSet in
-                    items.remove(atOffsets: indexSet)
+                    viewModel.deleteItems(at: indexSet)
                 }
             }
             .navigationTitle("Shopping List")
@@ -59,7 +42,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddItem) {
                 AddItemView { newItem in
-                    items.append(newItem)
+                    viewModel.addItem(newItem)
                 }
             }
         }
